@@ -1,0 +1,101 @@
+{% extends 'base.html' %}
+
+{% block title %}Ajouter un Plat{% endblock %}
+
+{% block header %}
+<div class="py-4 text-white text-center" style="background: linear-gradient(90deg, #8B0000, #A52A2A);">
+  <h1 class="mb-0">AJOUTER UN PLAT</h1>
+</div>
+{% endblock %}
+
+{% block content %}
+<style>
+  body {
+    background-color: #f8f5f0;
+  }
+
+  .form-wrapper {
+    min-height: 100vh; 
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .form-wrapper label {
+    font-weight: 600;
+    display: block;
+    margin-bottom: 0.5rem;
+    color: #6b2e2e; /* Marron foncé */
+  }
+
+  .form-wrapper input,
+  .form-wrapper select,
+  .form-wrapper textarea {
+    width: 100%;
+    padding: 0.75rem;
+    border: 2px solid #d4b89c;
+    border-radius: 10px;
+    font-size: 1rem;
+    background-color: #fffdf9;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  }
+
+  .form-wrapper input:focus,
+  .form-wrapper select:focus,
+  .form-wrapper textarea:focus {
+    border-color: #8B0000;
+    background-color: #ffffff;
+    outline: none;
+    box-shadow: 0 0 5px rgba(139, 0, 0, 0.3);
+  }
+
+  .card {
+    border-radius: 12px;
+  }
+
+  .card-header {
+    border-top-left-radius: 12px;
+    border-top-right-radius: 12px;
+    background: linear-gradient(90deg, #8B0000, #A52A2A);
+  }
+
+  .card-footer {
+    border-bottom-left-radius: 12px;
+    border-bottom-right-radius: 12px;
+  }
+
+  .btn-primary {
+    background-color: #8B0000;
+    border-color: #8B0000;
+  }
+  .btn-primary:hover {
+    background-color: #A52A2A;
+    border-color: #A52A2A;
+  }
+
+  .btn-secondary {
+    background-color: #6c757d;
+    border-color: #6c757d;
+  }
+</style>
+
+<div class="form-wrapper">
+  <div class="container" style="max-width: 700px;">
+    <div class="card shadow-lg border-0">
+      <div class="card-header text-white text-center py-3">
+        <h2 class="mb-0">Ajouter un Plat</h2>
+      </div>
+      <div class="card-body p-5 bg-white">
+        <form method="post" enctype="multipart/form-data">
+          {% csrf_token %}
+          {{ form.as_p }}
+          <button type="submit" class="btn btn-primary w-100 mt-4">Ajouter</button>
+        </form>
+      </div>
+      <div class="card-footer text-center bg-light py-3">
+        <a href="{% url 'users:admin_dashboard' %}" class="btn btn-secondary w-100">← Retour au Tableau de Bord</a>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

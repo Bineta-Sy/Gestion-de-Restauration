@@ -1,0 +1,120 @@
+{% extends 'base.html'%}
+
+{% block title %}Connexion{% endblock %}
+
+{% block header %}Créer un compte client{% endblock %}
+
+{% block content %}
+<style>
+  body {
+    background-color: #fff8f0; /* beige doux, chaleureux */
+  }
+
+  .form-wrapper {
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 2rem;
+  }
+
+  form p {
+    margin-bottom: 1.5rem;
+  }
+
+  form p label {
+    font-weight: 600;
+    display: block;
+    margin-bottom: 0.5rem;
+    color: #C98B53; /* brun clair chaleureux */
+  }
+
+  form p input,
+  form p select,
+  form p textarea {
+    width: 100%;
+    padding: 0.75rem;
+    border: 2px solid #deb887; /* couleur bois */
+    border-radius: 10px;
+    font-size: 1rem;
+    background-color: #fdfdfd;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  }
+
+  form p input:focus,
+  form p select:focus,
+  form p textarea:focus {
+    border-color: #8B0000; /* rouge foncé */
+    background-color: #ffffff;
+    outline: none;
+    box-shadow: 0 0 5px rgba(139, 0, 0, 0.3);
+  }
+
+  .card {
+    border-radius: 12px;
+    background-color: #fffaf5; /* fond doux légèrement rosé */
+  }
+
+  .card-header {
+    border-top-left-radius: 12px;
+    border-top-right-radius: 12px;
+    background: linear-gradient(90deg, #8B0000, #C98B53);
+  }
+
+  .card-header h2 {
+    color: white;
+    font-weight: bold;
+  }
+
+  .card-footer {
+    border-bottom-left-radius: 12px;
+    border-bottom-right-radius: 12px;
+    background-color: #f5f5f5;
+  }
+
+  .btn-primary {
+    background-color: #8B0000;
+    border-color: #8B0000;
+    font-weight: 600;
+  }
+
+  .btn-primary:hover {
+    background-color: #a90000;
+    border-color: #a90000;
+  }
+
+  .btn-link {
+    color: #8B0000;
+    text-decoration: none;
+    font-weight: 500;
+  }
+
+  .btn-link:hover {
+    text-decoration: underline;
+  }
+</style>
+
+<div class="form-wrapper">
+  <div class="container" style="max-width: 700px;">
+    <div class="card shadow-lg border-0">
+      <div class="card-header text-white text-center py-3">
+        <h2 class="mb-0">Créer un Nouveau Compte Client</h2>
+      </div>
+      <div class="card-body p-5">
+        <form method="post">
+          {% csrf_token %}
+          {{ form.as_p }}
+          <button type="submit" class="btn btn-primary w-100 mt-4">
+            Créer le Compte
+          </button>
+        </form>
+      </div>
+      <div class="card-footer text-center py-3">
+        <p class="mb-0">
+          Déjà un compte ? <a href="{% url 'users:login' %}" class="btn-link">Se connecter</a>
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

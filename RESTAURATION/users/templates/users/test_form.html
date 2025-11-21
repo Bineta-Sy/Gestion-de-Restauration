@@ -1,0 +1,15 @@
+<!-- users/templates/users/test_form.html -->
+<!DOCTYPE html>
+<html lang="fr">
+<head><meta charset="UTF-8"><title>Test Form</title></head>
+<body>
+    <h1>Test liste déroulante destinataire</h1>
+    <!-- test_form.html -->
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Test</button>
+</form>
+
+</body>
+</html>

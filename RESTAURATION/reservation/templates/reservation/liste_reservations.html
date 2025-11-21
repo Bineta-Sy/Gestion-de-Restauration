@@ -1,0 +1,69 @@
+{% extends 'base.html' %}
+
+{% block title %}Liste des Réservations{% endblock %}
+{% block header %}LISTE DES RESERVATION{% endblock %}
+
+
+{% block content %}
+<div class="container mt-4">
+    <h2 class="mb-4 text-center">Liste des Réservations</h2>
+
+    <div class="table-responsive">
+        <table class="table table-bordered table-hover align-middle text-center shadow-sm">
+            <thead class="table-dark">
+                <tr>
+                    <th>Nom</th>
+                    <th>Téléphone</th>
+                    <th>Email</th>
+                    <th>Nombre</th>
+                    <th>Type</th>
+                    <th>Date</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for r in reservations %}
+                <tr>
+                    <td>{{ r.nom }}</td>
+                    <td>{{ r.telephone }}</td>
+                    <td>{{ r.email }}</td>
+                    <td>{{ r.nombre_personnes }}</td>
+                    <td>{{ r.type_table }}</td>
+                    <td>{{ r.date }}</td>
+                    <td>
+                        <div class="d-flex justify-content-center gap-2 flex-wrap">
+                            <a href="{% url 'reservation:detail_reservation' r.id %}" class="btn btn-outline-primary btn-sm">
+                                <i class="bi bi-eye"></i> Détails
+                            </a>
+                            <a href="{% url 'reservation:modifier_reservation' r.id %}" class="btn btn-outline-success btn-sm">
+                                <i class="bi bi-pencil"></i> Modifier
+                            </a>
+                            <form action="{% url 'reservation:supprimer_reservation' r.id %}" method="post" class="d-inline"
+                                  onsubmit="return confirm('Confirmer la suppression ?');">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-outline-danger btn-sm">
+                                    <i class="bi bi-trash"></i> Supprimer
+                                </button>
+                            </form>
+                        </div>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="7" class="text-muted text-center">Aucune réservation trouvée.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <div class="d-flex justify-content-between mt-4">
+        <a href="{% url 'users:admin_dashboard' %}" class="btn btn-secondary btn-sm">
+            ← Retour au Tableau de Bord
+        </a>
+        <a href="{% url 'reservation:reserver_table' %}" class="btn btn-primary btn-sm">
+            <i class="bi bi-plus-circle me-1"></i> Ajouter une Réservation
+        </a>
+    </div>
+</div>
+{% endblock %}

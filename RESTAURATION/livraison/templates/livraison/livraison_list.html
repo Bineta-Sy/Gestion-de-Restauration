@@ -1,0 +1,91 @@
+{% extends 'base.html' %}
+
+{% block title %}Liste des Livraisons{% endblock %}
+
+{% block header %}Liste des Livraisons{% endblock %}
+
+{% load static %}
+
+{% block content %}
+<div class="container mt-4">
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    <!-- <h2 class="mb-0">Toutes les Livraisons</h2> -->
+    <a href="{% url 'livraison:livraison_create' %}" class="btn btn-primary">
+      <i class="fas fa-plus"></i> Nouvelle Livraison
+    </a>
+  </div>
+
+  {% if object_list %}
+  <div class="table-responsive">
+    <table class="table table-bordered table-hover align-middle">
+      <thead class="table-dark text-center">
+        <tr>
+          <th>ID Commande</th>
+          <th>Statut</th>
+          <th>Livreur</th>
+          <th>Détails</th>
+          <th>Modifier</th>
+          <th>Supprimer</th>
+          <th>Suivi</th>
+          <th>En cours</th>
+          <th>Livrée</th>
+          <th>Annulée</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        {% for livraison in object_list %}
+        <tr>
+          <td class="text-center">{{ livraison.commande.id }}</td>
+          <td class="text-center">{{ livraison.status_livraison }}</td>
+          <td class="text-center">{{ livraison.livreur.prenom }} {{ livraison.livreur.nom }}</td>
+
+          <td class="text-center">
+            <a href="{% url 'livraison:livraison_detail' livraison.pk %}" class="btn btn-info btn-sm">
+              <i class="fas fa-eye"></i>
+            </a>
+          </td>
+          <td class="text-center">
+            <a href="{% url 'livraison:livraison_update' livraison.pk %}" class="btn btn-warning btn-sm">
+              <i class="fas fa-edit"></i>
+            </a>
+          </td>
+          <td class="text-center">
+            <a href="{% url 'livraison:livraison_delete' livraison.pk %}" class="btn btn-danger btn-sm">
+              <i class="fas fa-trash-alt"></i>
+            </a>
+          </td>
+          <td class="text-center">
+            <a href="{% url 'livraison:suivi_livraison' livraison.pk %}" class="btn btn-primary btn-sm">
+              <i class="fas fa-map-marker-alt"></i>
+            </a>
+          </td>
+          <td class="text-center">
+            <a href="{% url 'livraison:livraison_changer_statut' livraison.pk 'En_cours' %}"
+              class="btn btn-warning btn-sm">
+              <i class="fas fa-hourglass-half"></i>
+            </a>
+          </td>
+          <td class="text-center">
+            <a href="{% url 'livraison:livraison_changer_statut' livraison.pk 'Livree' %}"
+              class="btn btn-success btn-sm">
+              <i class="fas fa-check-circle"></i>
+            </a>
+          </td>
+          <td class="text-center">
+            <a href="{% url 'livraison:livraison_changer_statut' livraison.pk 'Annulee' %}" class="btn btn-dark btn-sm">
+              <i class="fas fa-ban"></i>
+            </a>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  {% else %}
+  <div class="alert alert-warning text-center mt-4">
+    Aucune livraison trouvée.
+  </div>
+  {% endif %}
+</div>
+{% endblock %}

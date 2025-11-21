@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+
+{% block title %}Confirmer la Suppression de la Table{% endblock %}
+
+{% block header %}Confirmer la Suppression de la Table{% endblock %}
+
+{% block content %}
+    <h2>Supprimer la Table</h2>
+    <p>Êtes-vous sûr de vouloir supprimer la table numéro "{{ object.numero }}" ?</p>
+    
+    <form method="post">
+        {% csrf_token %}
+        <button type="submit" style="background-color: #dc3545;">Confirmer la suppression</button>
+        <a href="{% url 'table_detail' object.pk %}" class="button" style="background-color: #6c757d;">Annuler</a>
+    </form>
+{% endblock %}

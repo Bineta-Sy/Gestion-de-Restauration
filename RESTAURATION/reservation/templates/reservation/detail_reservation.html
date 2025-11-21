@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+
+{% block title %}Détail de la Réservation{% endblock %}
+
+{% block content %}
+<h2 class="text-2xl font-bold mb-6">Détail de la Réservation</h2>
+
+<table class="min-w-full border border-gray-300 bg-white shadow-md rounded">
+    <tbody>
+        <tr>
+            <th class="border px-4 py-2 text-left bg-gray-100">Nom</th>
+            <td class="border px-4 py-2">{{ reservation.nom }}</td>
+        </tr>
+        <tr>
+            <th class="border px-4 py-2 text-left bg-gray-100">Email</th>
+            <td class="border px-4 py-2">{{ reservation.email }}</td>
+        </tr>
+        <tr>
+            <th class="border px-4 py-2 text-left bg-gray-100">Téléphone</th>
+            <td class="border px-4 py-2">{{ reservation.telephone }}</td>
+        </tr>
+        <tr>
+            <th class="border px-4 py-2 text-left bg-gray-100">Nombre de personnes</th>
+            <td class="border px-4 py-2">{{ reservation.nombre_personnes }}</td>
+        </tr>
+        <tr>
+            <th class="border px-4 py-2 text-left bg-gray-100">Type de table</th>
+            <td class="border px-4 py-2">{{ reservation.type_table }}</td>
+        </tr>
+        <tr>
+            <th class="border px-4 py-2 text-left bg-gray-100">Date</th>
+            <td class="border px-4 py-2">{{ reservation.date }}</td>
+        </tr>
+    </tbody>
+</table>
+
+<a href="{% url 'reservation:liste_reservations' %}" class="mt-6 inline-block text-blue-600 hover:underline">
+    ← Retour à la liste
+</a>
+{% endblock %}

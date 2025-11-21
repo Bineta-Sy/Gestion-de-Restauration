@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    {% if form.instance.pk %}Modifier la Table{% else %}Créer une Table{% endif %}
+{% endblock %}
+
+{% block header %}
+    {% if form.instance.pk %}Modifier la Table{% else %}Créer une Table{% endif %}
+{% endblock %}
+
+{% block content %}
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Sauvegarder</button>
+    </form>
+    <a href="{% url 'table_list' %}" class="button" style="background-color: #6c757d;">Annuler</a>
+{% endblock %}

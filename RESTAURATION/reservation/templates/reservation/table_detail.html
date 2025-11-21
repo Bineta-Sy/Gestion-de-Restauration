@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+
+{% block title %}Détails de la Table{% endblock %}
+
+{% block header %}Détails de la Table{% endblock %}
+
+{% block content %}
+    <h2>Table Numéro {{ object.numero }}</h2>
+    <p><strong>Nombre de places:</strong> {{ object.nombre_place }}</p>
+    <p><strong>Statut:</strong> {{ object.status }}</p>
+
+    <a href="{% url 'table_update' object.pk %}" class="button">Modifier</a>
+    <a href="{% url 'table_delete' object.pk %}" class="button" style="background-color: #dc3545;">Supprimer</a>
+    <a href="{% url 'table_list' %}" class="button" style="background-color: #6c757d;">Retour à la liste</a>
+{% endblock %}

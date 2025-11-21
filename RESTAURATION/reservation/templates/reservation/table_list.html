@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+
+{% block title %}Liste des Tables{% endblock %}
+
+{% block header %}Liste des Tables{% endblock %}
+
+{% block content %}
+    <h2>Toutes les Tables</h2>
+    <a href="{% url 'table_create' %}" class="button">Ajouter une nouvelle Table</a>
+    
+    {% if object_list %}
+        <table>
+            <thead>
+                <tr>
+                    <th>Numéro</th>
+                    <th>Places</th>
+                    <th>Statut</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for table in object_list %}
+                <tr>
+                    <td>{{ table.numero }}</td>
+                    <td>{{ table.nombre_place }}</td>
+                    <td>{{ table.status }}</td>
+                    <td>
+                        <a href="{% url 'table_detail' table.pk %}">Voir</a>
+                        <a href="{% url 'table_update' table.pk %}">Modifier</a>
+                        <a href="{% url 'table_delete' table.pk %}">Supprimer</a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p>Aucune table trouvée.</p>
+    {% endif %}
+{% endblock %}

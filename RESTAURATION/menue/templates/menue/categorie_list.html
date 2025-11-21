@@ -1,0 +1,63 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Catégories{% endblock %}
+{% block header %}<h2 class="mb-4 text-center"><i class="bi bi-tags-fill me-2"></i>Catégories</h2>{% endblock %}
+
+
+{% block content %}
+<div class="container py-5">
+  
+
+  <form method="post" class="row g-3 mb-5 justify-content-center">
+    {% csrf_token %}
+    <div class="col-md-6">
+      <input type="text" name="nom" placeholder="Nom de la catégorie" class="form-control" required>
+    </div>
+    <div class="col-auto">
+      <button type="submit" class="btn btn-primary">
+        <i class="bi bi-plus-circle me-1"></i> Ajouter
+      </button>
+    </div>
+  </form>
+
+  <!-- Tableau des catégories -->
+  <div class="table-responsive shadow rounded">
+    <table class="table table-bordered table-hover align-middle mb-4">
+      <thead class="table-dark">
+        <tr>
+          <th scope="col">ID</th>
+          <th scope="col">Nom</th>
+          <th scope="col" class="text-center">Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for categorie in categories %}
+        <tr>
+          <td>{{ categorie.id }}</td>
+          <td>{{ categorie.nom }}</td>
+          <td class="text-center">
+            <form method="post" action="{% url 'menue:supprimer_categorie' categorie.id %}" class="d-inline" onsubmit="return confirm('Supprimer cette catégorie ?')">
+              {% csrf_token %}
+              <button type="submit" class="btn btn-sm btn-outline-danger">
+                <i class="bi bi-trash"></i> Supprimer
+              </button>
+            </form>
+          </td>
+        </tr>
+        {% empty %}
+        <tr>
+          <td colspan="3" class="text-center">Aucune catégorie disponible.</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Bouton de retour -->
+  <div class="text-center mt-4">
+    <a href="{% url 'users:admin_dashboard' %}" class="btn btn-secondary">
+      <i class="bi bi-arrow-left me-1"></i> Retour au Tableau de Bord
+    </a>
+  </div>
+</div>
+{% endblock %}

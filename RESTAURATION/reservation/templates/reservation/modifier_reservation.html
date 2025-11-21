@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+
+{% block title %}Modifier Réservation{% endblock %}
+
+{% block content %}
+<h2 class="text-2xl font-bold mb-4">Modifier la Réservation</h2>
+
+<form method="post" class="max-w-lg bg-white p-6 rounded shadow-md">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit" class="mt-4 bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700">Enregistrer</button>
+    <a href="{% url 'reservation:liste_reservations' %}" class="ml-4 text-gray-600 hover:underline">Annuler</a>
+</form>
+{% endblock %}

@@ -1,0 +1,101 @@
+{% extends 'base.html' %}
+{% block title %}Tableau de Bord - Client{% endblock %}
+{% block header %}TABLEAU DE BORD DU CLIENT{% endblock %}
+
+{% block content %}
+
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: #fff8f0; /* beige doux */
+    }
+  </style>
+</head>
+
+<div class="max-w-screen-xl mx-auto mt-12 px-4 py-10 bg-[#fffaf5] rounded-3xl shadow-2xl border border-[#deb887]">
+
+  <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+
+    <!-- Sidebar (Menu à gauche) -->
+    <aside class="md:col-span-1 p-6 space-y-4 bg-[#fdf5ea] rounded-2xl shadow-lg border border-[#deb887]">
+      <h2 class="text-2xl font-extrabold text-[#8B0000] mb-6 flex items-center">Menu Client</h2>
+      <nav class="space-y-3">
+        <a href="{% url 'users:client_dashboard' %}"
+          class="group block px-5 py-3 bg-white border border-[#deb887] hover:bg-[#f5e4d0] rounded-xl text-[#4b2e00] font-semibold text-lg shadow-sm transition">
+          Tableau de bord
+        </a>
+        <a href="{% url 'menue:liste_plats' %}"
+          class="group block px-5 py-3 bg-white border border-[#deb887] hover:bg-[#f5e4d0] rounded-xl text-[#4b2e00] font-semibold text-lg shadow-sm transition">
+          Menu
+        </a>
+        <a href="{% url 'reservation:reserver_table' %}"
+          class="group block px-5 py-3 bg-white border border-[#deb887] hover:bg-[#f5e4d0] rounded-xl text-[#4b2e00] font-semibold text-lg shadow-sm transition">
+          Réservations
+        </a>
+        <a href="{% url 'home' %}"
+          class="group block px-5 py-3 bg-[#ffece0] border border-[#c88c52] hover:bg-[#f6d8b8] rounded-xl text-[#8B0000] font-semibold text-lg shadow-sm mt-6 transition">
+          Déconnexion
+        </a>
+      </nav>
+    </aside>
+
+    <!-- Contenu principal (3 colonnes) -->
+    <section class="md:col-span-3 p-6">
+
+      <h1 class="text-4xl font-extrabold text-[#8B0000] mb-8 flex items-center">
+        Bonjour <span class="text-[#C98B53] ml-2">{{ client.prenom }} {{ client.nom }}</span> !
+      </h1>
+
+      <!-- Grid interne : commandes à gauche, suivi livraison à droite -->
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+
+        <!-- Commandes récentes (2/3 largeur) -->
+        <div class="lg:col-span-2 grid grid-cols-1 sm:grid-cols-2 gap-6">
+          {% for commande in commandes %}
+          <div
+            class="bg-gradient-to-br from-[#f5ede6] to-[#f1e6d7] border-l-8 border-[#C98B53] p-7 rounded-2xl shadow-lg">
+            <h3 class="text-sm font-bold text-[#8B0000] uppercase mb-1">Commande #{{ commande.id }}</h3>
+            <p class="text-[#4b2e00] mb-2">Date : {{ commande.date_commande|date:"d/m/Y H:i" }}</p>
+            <p class="text-3xl font-extrabold text-[#8B0000]">{{ commande.total }} FCFA</p>
+            <a href="{% url 'commande:details_commande' commande.id %}"
+              class="mt-3 inline-block text-[#8B0000] hover:underline font-semibold">
+              Voir détails →
+            </a>
+          </div>
+          {% empty %}
+          <p class="col-span-3 text-[#a67c4b] italic text-center">Vous n'avez aucune commande récente.</p>
+          {% endfor %}
+        </div>
+
+        <!-- Suivi de livraison (1/3 largeur) -->
+        <div
+          class="bg-gradient-to-br from-[#f3f7f0] to-[#dce9d7] border-l-8 border-[#8B0000] p-7 rounded-2xl shadow-lg">
+          <h3 class="text-lg font-bold text-[#8B0000] uppercase mb-4">Suivi de livraison</h3>
+
+          {% if livreur %}
+          <p class="mb-2 text-[#4b2e00]">
+            Livré par : <span class="font-semibold">{{ livreur.prenom }} {{ livreur.nom }}</span>
+          </p>
+          <p class="mb-4 text-[#4b2e00]">Téléphone : <a href="tel:{{ livreur.telephone }}"
+              class="text-[#8B0000] hover:underline">{{ livreur.telephone }}</a></p>
+
+          <a href="{% url 'livraison:position_livreur' livreur.id %}"
+            class="inline-block bg-[#8B0000] text-white py-3 px-6 rounded-xl shadow hover:bg-[#a90000] font-semibold transition">
+            Voir la position GPS du livreur
+          </a>
+          {% else %}
+          <p class="text-[#a67c4b] italic">Aucune livraison en cours actuellement.</p>
+          {% endif %}
+        </div>
+
+      </div>
+
+    </section>
+  </div>
+</div>
+
+{% endblock %}

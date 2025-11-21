@@ -1,0 +1,88 @@
+{% extends 'base.html' %}
+
+{% block title %}Détails de l'Utilisateur{% endblock %}
+
+{% block header %}
+<h1 class="text-center mb-4" style="color: #8B0000;">Détails de l'Utilisateur</h1>
+{% endblock %}
+
+{% block content %}
+<style>
+    .card {
+        border-radius: 12px;
+        background-color: #fffaf5; /* fond doux */
+    }
+
+    .card-title {
+        color: #8B0000; /* rouge foncé */
+        font-weight: bold;
+    }
+
+    .list-group-item {
+        background-color: #fff8f0;
+        border-left: 5px solid #C98B53; /* bois clair */
+        margin-bottom: 0.5rem;
+        font-size: 1.05rem;
+    }
+
+    .btn-warning {
+        background-color: #C98B53;
+        border: none;
+        color: white;
+    }
+
+    .btn-warning:hover {
+        background-color: #a76e3f;
+    }
+
+    .btn-danger {
+        background-color: #8B0000;
+        border: none;
+    }
+
+    .btn-danger:hover {
+        background-color: #a90000;
+    }
+
+    .btn-secondary {
+        background-color: #6c757d;
+        border: none;
+    }
+
+    .btn-secondary:hover {
+        background-color: #5a6268;
+    }
+
+</style>
+
+<div class="container">
+    <div class="card shadow-sm border-0">
+        <div class="card-body">
+            <h3 class="card-title mb-3">
+                <i class="bi bi-person-circle me-2"></i> 
+                {{ object.prenom }} {{ object.nom }}
+            </h3>
+            <ul class="list-group list-group-flush">
+                <li class="list-group-item"><strong>Email :</strong> {{ object.email }}</li>
+                <li class="list-group-item"><strong>Rôle :</strong> {{ object.get_role_display }}</li>
+                <li class="list-group-item"><strong>Téléphone :</strong> {{ object.telephone|default:"Non spécifié" }}</li>
+                {% if object.client %}
+                    <li class="list-group-item"><strong>Adresse (Client) :</strong> {{ object.client.adresse|default:"Non spécifiée" }}</li>
+                {% endif %}
+            </ul>
+
+            <div class="mt-4 d-flex justify-content-between">
+                <a href="{% url 'users:utilisateur_update' object.pk %}" class="btn btn-warning">
+                    <i class="bi bi-pencil-square"></i> Modifier
+                </a>
+                <a href="{% url 'users:utilisateur_delete' object.pk %}" class="btn btn-danger">
+                    <i class="bi bi-trash"></i> Supprimer
+                </a>
+                <a href="{% url 'users:utilisateur_list' %}" class="btn btn-secondary">
+                    <i class="bi bi-arrow-left"></i> Retour à la liste
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

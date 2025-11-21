@@ -1,0 +1,118 @@
+{% extends "base.html" %}
+{% block title %}Tableau de bord Livreur{% endblock %}
+{% block header %}
+<div class="py-4 text-center text-white" style="background: linear-gradient(90deg, #8B0000, #A52A2A);">
+  <h1 class="mb-0">TABLEAU DE BORD DU LIVREUR</h1>
+</div>
+{% endblock %}
+
+{% block content %}
+<style>
+  /* Boutons custom comme pour le cuisinier */
+  .btn-primary-custom {
+    background-color: #8B0000;
+    border-color: #8B0000;
+    color: #fff;
+  }
+  .btn-primary-custom:hover {
+    background-color: #A52A2A;
+    border-color: #A52A2A;
+  }
+  .btn-warning-custom {
+    background-color: #FFD700;
+    border-color: #FFC107;
+    color: #000;
+    font-weight: 600;
+  }
+  .btn-warning-custom:hover {
+    background-color: #FFC107;
+    border-color: #FFB300;
+  }
+  .btn-danger-custom {
+    background-color: #B22222;
+    border-color: #A52A2A;
+    color: #fff;
+  }
+  .btn-danger-custom:hover {
+    background-color: #DC143C;
+    border-color: #B22222;
+  }
+  .btn-success-custom {
+    background-color: #006400;
+    border-color: #008000;
+    color: #fff;
+  }
+  .btn-success-custom:hover {
+    background-color: #228B22;
+    border-color: #006400;
+  }
+
+  /* Card */
+  .card {
+    border-radius: 12px;
+  }
+</style>
+
+<div class="container py-5">
+  <div class="card p-4 shadow">
+
+    <div class="text-center mb-5">
+      <h1 class="display-5 fw-bold text-danger">
+        🚚 Bonjour {{ request.user.first_name }} {{ request.user.last_name }}
+      </h1>
+      <p class="lead text-muted">Livraisons prêtes à être effectuées :</p>
+    </div>
+
+    {% if livraisons %}
+    <div class="row gy-4 justify-content-center">
+      {% for livraison in livraisons %}
+      <div class="col-12 col-md-6 col-lg-4">
+        <div class="card shadow-sm h-100">
+          <div class="card-header bg-light">
+            <small class="text-muted">Livraison #{{ livraison.id }}</small>
+            <h5 class="card-title mt-1 mb-0">Statut : 
+              <span class="text-warning fw-semibold">{{ livraison.status_livraison }}</span>
+            </h5>
+            <small class="text-muted">Commande #{{ livraison.commande.id }}</small>
+          </div>
+          <div class="card-body">
+            <p><strong>Client :</strong> {{ livraison.commande.client.prenom }} {{ livraison.commande.client.nom }}</p>
+            <p><strong>Adresse :</strong> {{ livraison.commande.client.adresse|default:"-" }}</p>
+
+            <p><strong>Plats :</strong></p>
+            <ul class="list-group list-group-flush mb-3">
+              {% for ligne in livraison.commande.lignecommande_set.all %}
+              <li class="list-group-item d-flex justify-content-between align-items-center">
+                {{ ligne.plat.nom }}
+                <span class="badge bg-primary rounded-pill">x{{ ligne.quantite }}</span>
+              </li>
+              {% endfor %}
+            </ul>
+
+            <form action="{% url 'livraison:marquer_livree' livraison.id %}" method="post" class="mt-3">
+              {% csrf_token %}
+              <button type="submit" class="btn btn-success-custom w-100">
+                ✅ Marquer comme livrée
+              </button>
+            </form>
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+    {% else %}
+    <p class="text-center text-muted fs-5 mt-5">Aucune livraison prête pour le moment.</p>
+    {% endif %}
+
+    <div class="text-center mt-5">
+      <a href="{% url 'users:messagerie' %}" class="btn btn-primary-custom btn-lg me-3">
+        💬 Ouvrir la messagerie
+      </a>
+      <a href="{% url 'home' %}" class="btn btn-warning-custom btn-lg">
+        🔒 Déconnexion
+      </a>
+    </div>
+
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,92 @@
+{% extends 'base.html' %}
+
+{% block title %}Tableau de Bord - Administrateur{% endblock %}
+{% block header %}Tableau de Bord - Administrateur{% endblock %}
+
+{% block content %}
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: #fff8f0;
+    }
+  </style>
+</head>
+
+<div class="max-w-screen-xl mx-auto mt-12 px-4 py-10 bg-[#fffaf5] rounded-3xl shadow-2xl border border-[#deb887]">
+  <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+
+    <!-- Sidebar -->
+    <aside class="md:col-span-1 p-6 bg-[#fdf5ea] rounded-2xl shadow-lg border border-[#deb887] space-y-4">
+      <h2 class="text-2xl font-extrabold text-[#8B0000] mb-4">Menu Rapide</h2>
+      <nav class="space-y-3">
+        <a href="{% url 'users:utilisateur_list' %}" class="block px-4 py-3 bg-white border border-[#deb887] hover:bg-[#f5e4d0] rounded-xl text-[#4b2e00] font-semibold shadow-sm transition">UTILISATEUR</a>
+        <a href="{% url 'commande:liste_commandes' %}" class="block px-4 py-3 bg-white border border-[#deb887] hover:bg-[#f5e4d0] rounded-xl text-[#4b2e00] font-semibold shadow-sm transition">COMMANDES</a>
+        <a href="{% url 'reservation:liste_reservations' %}" class="block px-4 py-3 bg-white border border-[#deb887] hover:bg-[#f5e4d0] rounded-xl text-[#4b2e00] font-semibold shadow-sm transition">RESERVATIONS</a>
+        <a href="{% url 'menue:ajouter_plat' %}" class="block px-4 py-3 bg-white border border-[#deb887] hover:bg-[#f5e4d0] rounded-xl text-[#4b2e00] font-semibold shadow-sm transition">PLATS</a>
+        <a href="{% url 'menue:liste_categories' %}" class="block px-4 py-3 bg-white border border-[#deb887] hover:bg-[#f5e4d0] rounded-xl text-[#4b2e00] font-semibold shadow-sm transition">CATEGORIES</a>
+        <a href="{% url 'livraison:livraison_list' %}" class="block px-4 py-3 bg-white border border-[#deb887] hover:bg-[#f5e4d0] rounded-xl text-[#4b2e00] font-semibold shadow-sm transition">LIVRAISON</a>
+        <a href="{% url 'commande:statistiques_commandes' %}" class="block px-4 py-3 bg-white border border-[#deb887] hover:bg-[#f5e4d0] rounded-xl text-[#4b2e00] font-semibold shadow-sm transition">STATISTIQUES</a>
+        <a href="{% url 'users:messagerie' %}" class="block px-4 py-3 bg-white border border-[#deb887] hover:bg-[#f5e4d0] rounded-xl text-[#4b2e00] font-semibold shadow-sm transition">MESSAGERIES</a>
+        <a href="{% url 'home' %}" class="block px-4 py-3 bg-[#ffece0] border border-[#c88c52] hover:bg-[#f6d8b8] rounded-xl text-[#8B0000] font-semibold shadow-sm transition mt-6">DECONNEXION</a>
+      </nav>
+    </aside>
+
+    <!-- Contenu principal -->
+    <section class="md:col-span-3 p-6">
+      <h1 class="text-3xl font-extrabold text-[#8B0000] mb-6">
+        Bonjour, <span class="text-[#C98B53]">{{ administrateur.nom }}</span> !
+      </h1>
+      <p class="text-gray-600 mb-10">Voici un aperçu des performances actuelles de votre restaurant.</p>
+
+      <!-- Statistiques -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div class="bg-gradient-to-br from-[#e6f0e6] to-[#d6e5d6] p-6 rounded-xl border-l-8 border-[#8B0000] shadow-lg">
+          <h3 class="text-sm text-[#8B0000] font-bold uppercase mb-1">Commandes aujourd'hui</h3>
+          <p class="text-4xl font-extrabold text-[#4b2e00]">{{ commandes_jour }}</p>
+        </div>
+        <div class="bg-gradient-to-br from-[#f6f0e3] to-[#ede3c9] p-6 rounded-xl border-l-8 border-[#C98B53] shadow-lg">
+          <h3 class="text-sm text-[#C98B53] font-bold uppercase mb-1">Revenus aujourd'hui</h3>
+          <p class="text-4xl font-extrabold text-[#4b2e00]">{{ revenus_jour }} F</p>
+        </div>
+        <div class="bg-gradient-to-br from-[#f5e9f0] to-[#e6d8e0] p-6 rounded-xl border-l-8 border-[#8B0000] shadow-lg">
+          <h3 class="text-sm text-[#8B0000] font-bold uppercase mb-1">Commandes ce mois</h3>
+          <p class="text-4xl font-extrabold text-[#4b2e00]">{{ commandes_mois }}</p>
+        </div>
+        <div class="bg-gradient-to-br from-[#e8e6f2] to-[#d6d4e4] p-6 rounded-xl border-l-8 border-[#C98B53] shadow-lg">
+          <h3 class="text-sm text-[#C98B53] font-bold uppercase mb-1">Revenus ce mois</h3>
+          <p class="text-4xl font-extrabold text-[#4b2e00]">{{ revenus_mois }} F</p>
+        </div>
+        <div class="bg-gradient-to-br from-[#f9e6eb] to-[#f1d4db] p-6 rounded-xl border-l-8 border-[#8B0000] shadow-lg">
+          <h3 class="text-sm text-[#8B0000] font-bold uppercase mb-1">Commandes cette année</h3>
+          <p class="text-4xl font-extrabold text-[#4b2e00]">{{ commandes_annee }}</p>
+        </div>
+        <div class="bg-gradient-to-br from-[#f9ece1] to-[#f2dfce] p-6 rounded-xl border-l-8 border-[#C98B53] shadow-lg">
+          <h3 class="text-sm text-[#C98B53] font-bold uppercase mb-1">Revenus cette année</h3>
+          <p class="text-4xl font-extrabold text-[#4b2e00]">{{ revenus_annee }} F</p>
+        </div>
+      </div>
+
+      {% if taux_croissance_mensuel or taux_croissance_annuel %}
+      <div class="mt-10 grid grid-cols-1 sm:grid-cols-2 gap-6">
+        {% if taux_croissance_mensuel %}
+        <div class="p-5 bg-[#fffaf2] border border-[#deb887] rounded-xl shadow">
+          <h4 class="text-[#8B0000] text-lg font-semibold mb-1">Croissance Mensuelle</h4>
+          <p class="text-2xl font-bold text-[#4b2e00]">{{ taux_croissance_mensuel }}%</p>
+        </div>
+        {% endif %}
+        {% if taux_croissance_annuel %}
+        <div class="p-5 bg-[#fffaf2] border border-[#deb887] rounded-xl shadow">
+          <h4 class="text-[#8B0000] text-lg font-semibold mb-1">Croissance Annuelle</h4>
+          <p class="text-2xl font-bold text-[#4b2e00]">{{ taux_croissance_annuel }}%</p>
+        </div>
+        {% endif %}
+      </div>
+      {% endif %}
+    </section>
+  </div>
+</div>
+{% endblock %}

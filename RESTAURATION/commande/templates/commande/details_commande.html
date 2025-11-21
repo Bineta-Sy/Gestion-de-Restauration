@@ -1,0 +1,181 @@
+{% extends 'base.html' %}
+
+{% block title %}Commande #{{ commande.id }}{% endblock %}
+{% block header %} DETAILS COMMANDES{% endblock %}
+
+
+{% block content %}
+<style>
+  .container-detail {
+    max-width: 900px;
+    margin: 3rem auto;
+    background: #fff;
+    border-radius: 12px;
+    border: 1px solid #e2e8f0; /* gris clair */
+    box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+    padding: 2rem 3rem;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: #34495e;
+  }
+
+  h1 {
+    color: #4c51bf; /* Indigo 600 */
+    font-weight: 700;
+    font-size: 2rem;
+    text-align: center;
+    margin-bottom: 2.5rem;
+  }
+
+  .details-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2.5rem;
+  }
+  @media (max-width: 768px) {
+    .details-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .details-section > div {
+    margin-bottom: 1.5rem;
+  }
+
+  .label {
+    font-weight: 700;
+    color: #2c3e50;
+  }
+
+  .value {
+    margin-left: 0.5rem;
+    color: #555;
+  }
+
+  .instructions {
+    margin-left: 0.5rem;
+    color: #6b7280; /* gris moyen */
+    white-space: pre-wrap;
+  }
+
+  /* Styles pour le statut avec couleurs */
+  .status {
+    display: inline-block;
+    padding: 0.3rem 0.8rem;
+    border-radius: 9999px;
+    font-size: 0.875rem;
+    font-weight: 600;
+  }
+  .status.en-cours {
+    background-color: #fef3c7;
+    color: #b45309;           
+  }
+  .status.livree {
+    background-color: #d1fae5; 
+    color: #065f46;           
+  }
+  .status.annulee {
+    background-color: #fee2e2; 
+    color: #991b1b;            
+  }
+  .status.autre {
+    background-color: #e5e7eb; 
+    color: #374151;           
+  }
+
+  .back-button {
+    display: inline-block;
+    background-color: #4a5568; 
+    color: white;
+    font-weight: 700;
+    padding: 0.75rem 2rem;
+    border-radius: 8px;
+    text-decoration: none;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    transition: background-color 0.2s ease;
+  }
+  .back-button:hover {
+    background-color: #2d3748;
+  }
+</style>
+
+<div class="container-detail">
+  <h1>Détails de la commande N°{{ commande.id }}</h1>
+
+  <div class="details-grid">
+    <!-- Colonne gauche -->
+    <div class="details-section">
+      <div>
+        <span class="label">Client :</span>
+        <span class="value">
+          {% if commande.client %}
+            {{ commande.client.nom }} {{ commande.client.prenom }}
+          {% else %}
+            <em style="color:#999;">Anonyme</em>
+          {% endif %}
+        </span>
+      </div>
+
+      <div>
+        <span class="label">Plat :</span>
+        <span class="value">
+          {% if commande.plat %}
+            {{ commande.plat.nom }}
+          {% else %}
+            <em style="color:#999;">Aucun plat associé</em>
+          {% endif %}
+        </span>
+      </div>
+
+      <div>
+        <span class="label">Type :</span>
+        <span class="value">{{ commande.type_commande }}</span>
+      </div>
+
+      <div>
+        <span class="label">Instructions :</span>
+        <p class="instructions">{{ commande.instruction|default:"Aucune instruction" }}</p>
+      </div>
+    </div>
+
+    <!-- Colonne droite -->
+    <div class="details-section">
+      <div>
+        <span class="label">Statut :</span>
+        <span class="value">
+          {% if commande.status == 'En cours' %}
+            <span class="status en-cours">{{ commande.status }}</span>
+          {% elif commande.status == 'Livrée' %}
+            <span class="status livree">{{ commande.status }}</span>
+          {% elif commande.status == 'Annulée' %}
+            <span class="status annulee">{{ commande.status }}</span>
+          {% else %}
+            <span class="status autre">{{ commande.status }}</span>
+          {% endif %}
+        </span>
+      </div>
+
+      <div>
+        <span class="label">Date :</span>
+        <span class="value">{{ commande.date_commande|date:"d/m/Y H:i" }}</span>
+      </div>
+
+      <div>
+        <span class="label">Total :</span>
+        <span class="value">
+          {% if commande.total %}
+            {{ commande.total }} FCFA
+          {% else %}
+            <em style="color:#999;">N/A</em>
+          {% endif %}
+        </span>
+      </div>
+    </div>
+  </div>
+
+  <div class="mt-10 text-center">
+    <a href="{% url 'commande:liste_commandes' %}" class="back-button">
+      Retour à la liste des commandes
+    </a>
+  </div>
+</div>
+{% endblock %}

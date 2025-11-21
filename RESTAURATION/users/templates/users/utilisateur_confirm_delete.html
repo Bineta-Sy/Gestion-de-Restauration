@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+
+{% block title %}Confirmer la Suppression{% endblock %}
+
+{% block header %}Confirmer la Suppression{% endblock %}
+
+{% block content %}
+    <h2>Supprimer l'Utilisateur</h2>
+    <p>Êtes-vous sûr de vouloir supprimer l'utilisateur "{{ object.prenom }} {{ object.nom }}" ?</p>
+    
+    <form method="post">
+        {% csrf_token %}
+        <button type="submit" style="background-color: #dc3545;">Confirmer la suppression</button>
+        <a href="{% url 'users:utilisateur_detail' object.pk %}" class="button" style="background-color: #6c757d;">Annuler</a>
+    </form>
+{% endblock %}

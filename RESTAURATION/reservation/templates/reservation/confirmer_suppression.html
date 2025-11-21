@@ -1,0 +1,90 @@
+{% extends 'base.html' %}
+
+{% block title %}Confirmer Suppression{% endblock %}
+
+{% block content %}
+<style>
+  .form-wrapper {
+    min-height: 90vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #f8f9fa;
+  }
+
+  .card {
+    border-radius: 12px;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.08);
+    max-width: 500px;
+    width: 100%;
+    background-color: #fff;
+    overflow: hidden;
+  }
+
+  .card-header {
+    background: linear-gradient(90deg, #dc3545, #c82333);
+    color: white;
+    padding: 2rem;
+    text-align: center;
+    font-size: 1.8rem;
+    font-weight: 700;
+  }
+
+  .card-body {
+    padding: 2rem;
+    font-size: 1rem;
+    color: #212529;
+  }
+
+  .btn-delete {
+    width: 100%;
+    padding: 0.75rem;
+    font-size: 1rem;
+    background-color: #dc3545;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    font-weight: 600;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: background-color 0.2s ease;
+  }
+
+  .btn-delete:hover {
+    background-color: #c82333;
+  }
+
+  .cancel-link {
+    display: block;
+    margin-top: 1rem;
+    text-align: center;
+    color: #6c757d;
+    text-decoration: underline;
+    font-weight: 500;
+  }
+
+  .cancel-link:hover {
+    color: #495057;
+  }
+</style>
+
+<div class="form-wrapper">
+  <div class="card">
+    <div class="card-header">
+      Confirmation de Suppression
+    </div>
+    <div class="card-body">
+      <p>
+        Voulez-vous vraiment supprimer la réservation de 
+        <strong>{{ reservation.nom }}</strong> pour le 
+        <strong>{{ reservation.date }}</strong> ?
+      </p>
+
+      <form method="post" class="mt-4">
+        {% csrf_token %}
+        <button type="submit" class="btn-delete">Oui, supprimer</button>
+        <a href="{% url 'reservation:liste_reservations' %}" class="cancel-link">Non, revenir à la liste</a>
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock %}

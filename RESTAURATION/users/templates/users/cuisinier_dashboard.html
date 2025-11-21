@@ -1,0 +1,161 @@
+{% extends "base.html" %}
+
+{% block title %}Tableau de bord Cuisinier{% endblock %}
+{% block header %}TABLEAU DE BORD DU CUISINIER{% endblock %}
+
+{% block content %}
+<style>
+  :root {
+    --brun-clair: #C98B53;
+    --brun-fonce: #b07846;
+    --rouge: #8B0000;
+    --rouge-hover: #a90000;
+  }
+
+  .btn-primary-custom {
+    background-color: var(--brun-clair);
+    border-color: var(--brun-clair);
+    color: #fff;
+    font-weight: bold;
+  }
+  .btn-primary-custom:hover {
+    background-color: var(--brun-fonce);
+    border-color: var(--brun-fonce);
+  }
+
+  .btn-secondary-custom {
+    background-color: var(--rouge);
+    border-color: var(--rouge);
+    color: #fff;
+    font-weight: bold;
+  }
+  .btn-secondary-custom:hover {
+    background-color: var(--rouge-hover);
+    border-color: var(--rouge-hover);
+  }
+
+  .card-header {
+    background-color: var(--brun-clair);
+    color: white;
+    font-weight: bold;
+    text-align: center;
+  }
+
+  .card {
+    border: 1px solid #deb887;
+    border-radius: 10px;
+  }
+
+  .badge {
+    background-color: var(--rouge) !important;
+    color: #fff;
+    font-weight: bold;
+  }
+
+  .alert-warning {
+    background-color: #fff3cd;
+    color: var(--rouge);
+    border: 1px solid #deb887;
+    font-weight: 500;
+  }
+
+  /* Lien épuisé */
+  .mark-epuise {
+    display: inline-block;
+    color: var(--rouge);
+    font-size: 0.9rem;
+    cursor: pointer;
+    text-decoration: underline;
+    margin-top: 5px;
+  }
+  .mark-epuise:hover {
+    color: var(--rouge-hover);
+  }
+</style>
+
+<div class="container py-5">
+  <div class="card p-4 shadow">
+
+    <div class="text-center mb-4">
+      <h1 class="display-5 fw-bold" style="color: var(--rouge);">
+        👨‍🍳 Bonjour {{ request.session.prenom }} {{ request.session.nom }}
+      </h1>
+      <p class="lead text-muted">Voici les commandes à préparer</p>
+    </div>
+
+    {% if commandes %}
+    <div class="row gy-4 justify-content-center">
+      {% for commande in commandes %}
+      <div class="col-12 col-md-6 col-lg-4">
+        <div class="card shadow-sm h-100">
+          <div class="card-header">
+            <small class="text-white-50">Commande #{{ commande.id }}</small>
+            <h5 class="card-title mt-1 mb-0">{{ commande.type_commande }}</h5>
+            <small class="text-white-50">{{ commande.date_commande|date:"d/m/Y H:i" }}</small>
+          </div>
+          <div class="card-body">
+
+            <ul class="list-group list-group-flush mb-3">
+              {% for ligne in commande.lignecommande_set.all %}
+              <li class="list-group-item d-flex flex-column">
+                <div class="d-flex justify-content-between align-items-center">
+                  {{ ligne.plat.nom }}
+                  <span class="badge rounded-pill">x{{ ligne.quantite }}</span>
+                </div>
+
+                {% if not ligne.plat.est_epuise %}
+                <!-- Lien pour marquer épuisé -->
+                <form method="post" action="{% url 'users:marquer_epuise' ligne.plat.id %}">
+                  {% csrf_token %}
+                  <span class="mark-epuise" onclick="this.closest('form').submit()">
+                    🚫 Marquer épuisé
+                  </span>
+                </form>
+                {% else %}
+                <div class="text-danger mt-1" style="font-size: 0.85rem;">
+                  ⚠️ Plat épuisé
+                </div>
+                {% endif %}
+              </li>
+              {% endfor %}
+            </ul>
+
+            {% if commande.instruction %}
+            <div class="alert alert-warning py-2" role="alert" style="font-size: 0.9rem;">
+              <strong>Instructions :</strong> {{ commande.instruction }}
+            </div>
+            {% endif %}
+
+            <form method="post" action="{% url 'users:changer_statut_commande' commande.id 'En cours' %}" class="mb-2">
+              {% csrf_token %}
+              <button type="submit" class="btn btn-primary-custom w-100">
+                🔄 Marquer en préparation
+              </button>
+            </form>
+
+            <form method="post" action="{% url 'users:changer_statut_commande' commande.id 'Prête' %}">
+              {% csrf_token %}
+              <button type="submit" class="btn btn-primary-custom w-100">
+                ✅ Marquer prête
+              </button>
+            </form>
+
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+    {% else %}
+    <p class="text-center text-muted fs-5 mt-5">Aucune commande à préparer pour le moment.</p>
+    {% endif %}
+
+    <div class="text-center mt-5">
+      <a href="{% url 'users:messagerie' %}" class="btn btn-primary-custom btn-lg">
+        💬 Ouvrir la messagerie
+      </a>
+      <a href="{% url 'home' %}" class="btn btn-secondary-custom btn-lg">🔒 Déconnexion</a>
+    </div>
+
+  </div>
+</div>
+{% endblock %}

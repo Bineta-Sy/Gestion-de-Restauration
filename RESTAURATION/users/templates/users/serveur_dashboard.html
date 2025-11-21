@@ -1,0 +1,132 @@
+{% extends "base.html" %}
+
+{% block title %}Tableau de bord Serveur{% endblock %}
+
+{% block header %}
+<div class="py-4 text-center text-white" style="background: linear-gradient(90deg, #8B0000, #A52A2A);">
+  <h1 class="mb-0">TABLEAU DE BORD DU SERVEUR</h1>
+</div>
+{% endblock %}
+
+{% block content %}
+<style>
+  @keyframes fadeInUp {
+    0% { opacity: 0; transform: translateY(20px); }
+    100% { opacity: 1; transform: translateY(0); }
+  }
+  .animate-fadeInUp {
+    animation: fadeInUp 0.7s ease forwards;
+  }
+  .card:hover {
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.12);
+    transform: translateY(-5px);
+    transition: 0.3s ease;
+  }
+  .card, .card * { color: #000 !important; }
+  small.text-muted, p.lead.text-muted, p.text-muted { color: #000 !important; }
+
+  /* Boutons custom */
+  .btn-primary-custom {
+    background-color: #8B0000;
+    border-color: #8B0000;
+    color: #fff;
+  }
+  .btn-primary-custom:hover {
+    background-color: #A52A2A;
+    border-color: #A52A2A;
+  }
+  .btn-warning-custom {
+    background-color: #FFD700;
+    border-color: #FFC107;
+    color: #000;
+    font-weight: 600;
+  }
+  .btn-warning-custom:hover {
+    background-color: #FFC107;
+    border-color: #FFB300;
+  }
+  .btn-danger-custom {
+    background-color: #B22222;
+    border-color: #A52A2A;
+    color: #fff;
+  }
+  .btn-danger-custom:hover {
+    background-color: #DC143C;
+    border-color: #B22222;
+  }
+</style>
+
+<div class="container py-5 animate-fadeInUp">
+  <div class="card p-4 shadow-sm">
+    <div class="text-center mb-5">
+      <h1 class="display-5 fw-bold text-danger">
+        Bonjour {{ request.utilisateur.nom }} {{ request.utilisateur.prenom }}
+      </h1>
+      <p class="lead">Commandes Prêtes à Servir</p>
+    </div>
+
+    {% if commandes_pretes %}
+    <div class="row gy-4 justify-content-center">
+      {% for commande in commandes_pretes %}
+      <div id="commande-{{ commande.id }}" class="col-12 col-md-6 col-lg-4">
+        <div class="card shadow-sm h-100">
+          <div class="card-header bg-light d-flex justify-content-between align-items-center">
+            <div>
+              <small>Commande numéro {{ commande.id }}</small>
+              <h5 class="card-title mt-1 mb-0 text-capitalize">{{ commande.type_commande }}</h5>
+              <small>{{ commande.date_commande|date:"d/m/Y H:i" }}</small>
+            </div>
+            <span class="status-icon d-none align-items-center text-success fw-semibold">
+              ✅ Servie
+            </span>
+          </div>
+          <div class="card-body d-flex flex-column justify-content-between">
+            <div class="mb-3">
+              <p><strong>Client :</strong> {{ commande.client.nom }} {{ commande.client.prenom }}</p>
+              <p><strong>Instructions :</strong> <em>{{ commande.instructions|default:"Aucune" }}</em></p>
+              <p><strong>Plats commandés :</strong></p>
+              <ul class="list-group list-group-flush">
+                {% for ligne in commande.lignecommande_set.all %}
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                  {{ ligne.plat.nom }}
+                  <span class="badge bg-primary rounded-pill">x{{ ligne.quantite }}</span>
+                </li>
+                {% empty %}
+                <li class="list-group-item">Aucun plat commandé</li>
+                {% endfor %}
+              </ul>
+            </div>
+
+            <footer class="mt-auto">
+              <form class="mark-served-form mb-2" method="post" data-id="{{ commande.id }}" data-url="{% url 'users:changer_statut_commande' commande.id 'Servie' %}">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-primary-custom w-100">
+                  ✅ Marquer comme servie
+                </button>
+              </form>
+
+              <form class="delete-commande-form d-none" method="post" data-id="{{ commande.id }}" data-url="{% url 'users:supprimer_commande' commande.id %}">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-danger-custom w-100">
+                  🗑 Supprimer
+                </button>
+              </form>
+            </footer>
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+    {% else %}
+    <p class="text-center fs-5 mt-5">Aucune commande prête pour le moment.</p>
+    {% endif %}
+
+    <div class="text-center mt-5">
+      <a href="{% url 'users:messagerie' %}" class="btn btn-primary-custom btn-lg">
+        💬 Ouvrir la messagerie
+      </a>
+      <a href="{% url 'home' %}" class="btn btn-warning-custom btn-lg">🔒 Déconnexion</a>
+    </div>
+  </div>
+</div>
+{% endblock %}

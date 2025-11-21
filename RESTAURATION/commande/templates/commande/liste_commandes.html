@@ -1,0 +1,157 @@
+{% extends 'base.html' %}
+
+{% block title %}Liste des Commandes{% endblock %}
+
+{% block header %}LISTE DE TOUTES LES COMMANDES{% endblock %}
+
+{% block content %}
+<style>
+  body {
+    background-color: #fff8f0; /* beige doux */
+  }
+
+  .card {
+    background-color: #fffaf5; /* fond doux légèrement rosé */
+    border-radius: 12px;
+    border: none;
+  }
+
+  .table {
+    border-collapse: separate !important;
+    border-spacing: 0 10px;
+  }
+
+  thead.table-dark {
+    background: linear-gradient(90deg, #8B0000, #C98B53);
+    color: white;
+    border-radius: 12px;
+  }
+
+  thead.table-dark th {
+    border: none !important;
+    font-weight: 600;
+    vertical-align: middle;
+  }
+
+  tbody tr {
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 1px 3px rgb(0 0 0 / 0.1);
+  }
+
+  tbody tr td {
+    vertical-align: middle;
+    border: none !important;
+  }
+
+  .btn-success {
+    background-color: #8B0000;
+    border-color: #8B0000;
+  }
+
+  .btn-success:hover {
+    background-color: #a90000;
+    border-color: #a90000;
+  }
+
+  .btn-warning {
+    background-color: #C98B53;
+    border-color: #C98B53;
+    color: #4b2e00;
+  }
+
+  .btn-warning:hover {
+    background-color: #b07c43;
+    border-color: #b07c43;
+    color: #3d2400;
+  }
+
+  .btn-danger {
+    background-color: #8B0000;
+    border-color: #8B0000;
+  }
+
+  .btn-danger:hover {
+    background-color: #a90000;
+    border-color: #a90000;
+  }
+
+  .btn-secondary {
+    background-color: #deb887;
+    border-color: #deb887;
+    color: #4b2e00;
+    font-weight: 600;
+  }
+
+  .btn-secondary:hover {
+    background-color: #c88c52;
+    border-color: #c88c52;
+    color: #3d2400;
+  }
+</style>
+
+<div class="container mt-5">
+    <div class="card shadow">
+        <div class="card-body">
+            <table class="table table-bordered table-striped align-middle">
+                <thead class="table-dark text-center">
+                    <tr>
+                        <th>ID</th>
+                        <th>Client</th>
+                        <th>Date</th>
+                        <th>Détails</th>
+                        <th>Modifier</th>
+                        <th>Supprimer</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for commande in commandes %}
+                    <tr>
+                        <td>{{ commande.id }}</td>
+                        <td>{{ commande.client.nom }} {{ commande.client.prenom }}</td>
+                        <td>{{ commande.date_commande }}</td>
+
+                        <!-- Voir -->
+                        <td class="text-center">
+                            <a href="{% url 'commande:details_commande' commande.id %}" 
+                               class="btn btn-success btn-sm" title="Voir les détails">
+                                <i class="fas fa-eye"></i>
+                            </a>
+                        </td>
+
+                        <!-- Modifier -->
+                        <td class="text-center">
+                            <a href="{% url 'commande:modifier_commande' commande.id %}" 
+                               class="btn btn-warning btn-sm" title="Modifier">
+                                <i class="fas fa-edit"></i>
+                            </a>
+                        </td>
+
+                        <!-- Supprimer -->
+                        <td class="text-center">
+                            <form method="post" action="{% url 'commande:supprimer_commande' commande.id %}" onsubmit="return confirm('Voulez-vous vraiment supprimer cette commande ?');">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-danger btn-sm" title="Supprimer">
+                                    <i class="fas fa-trash-alt"></i>
+                                </button>
+                            </form>
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="6" class="text-center text-muted">Aucune commande trouvée.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+
+            <!-- Bouton retour -->
+            <div class="d-flex justify-content-end mt-3">
+                <a href="{% url 'users:admin_dashboard' %}" class="btn btn-secondary">
+                    <i class="fas fa-arrow-left"></i> Retour
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

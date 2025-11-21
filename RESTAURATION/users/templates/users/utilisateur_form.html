@@ -1,0 +1,119 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    {% if form.instance.pk %}Modifier l'Utilisateur{% else %}Créer un Utilisateur{% endif %}
+{% endblock %}
+
+{% block header %}
+    {% if form.instance.pk %}Modifier l'Utilisateur{% else %}Créer un Utilisateur{% endif %}
+{% endblock %}
+
+{% block content %}
+<style>
+  body {
+    background-color: #fff8f0; /* beige doux */
+  }
+
+  .form-wrapper {
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 2rem;
+  }
+
+  form p {
+    margin-bottom: 1.5rem;
+  }
+
+  form p label {
+    font-weight: 600;
+    display: block;
+    margin-bottom: 0.5rem;
+    color: #C98B53; /* brun clair */
+  }
+
+  form p input,
+  form p select,
+  form p textarea {
+    width: 100%;
+    padding: 0.75rem;
+    border: 2px solid #deb887; /* bois */
+    border-radius: 10px;
+    font-size: 1rem;
+    background-color: #fdfdfd;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  }
+
+  form p input:focus,
+  form p select:focus,
+  form p textarea:focus {
+    border-color: #8B0000; /* rouge foncé */
+    background-color: #ffffff;
+    outline: none;
+    box-shadow: 0 0 5px rgba(139, 0, 0, 0.3);
+  }
+
+  .card {
+    border-radius: 12px;
+    background-color: #fffaf5; /* léger rosé */
+  }
+
+  .card-header {
+    border-top-left-radius: 12px;
+    border-top-right-radius: 12px;
+    background: linear-gradient(90deg, #8B0000, #C98B53);
+  }
+
+  .card-header h2 {
+    color: white;
+    font-weight: bold;
+  }
+
+  .btn-primary {
+    background-color: #8B0000;
+    border-color: #8B0000;
+    font-weight: 600;
+  }
+
+  .btn-primary:hover {
+    background-color: #a90000;
+    border-color: #a90000;
+  }
+
+  .btn-secondary {
+    background-color: #6c757d;
+    border-color: #6c757d;
+    font-weight: 600;
+  }
+
+</style>
+
+<div class="form-wrapper">
+  <div class="container" style="max-width: 700px;">
+    <div class="card shadow-lg border-0">
+      <div class="card-header text-white text-center py-3">
+        <h2 class="mb-0">
+          {% if form.instance.pk %}Modifier l'Utilisateur{% else %}Créer un Utilisateur{% endif %}
+        </h2>
+      </div>
+      <div class="card-body p-5">
+        <form method="post">
+          {% csrf_token %}
+          {{ form.as_p }}
+          <button type="submit" class="btn btn-primary w-100 mt-4">
+            {% if form.instance.pk %}
+              <i class="bi bi-save"></i> Sauvegarder
+            {% else %}
+              <i class="bi bi-person-plus-fill"></i> Créer
+            {% endif %}
+          </button>
+          <a href="{% url 'users:utilisateur_list' %}" class="btn btn-secondary w-100 mt-2">
+            <i class="bi bi-x-circle"></i> Annuler
+          </a>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

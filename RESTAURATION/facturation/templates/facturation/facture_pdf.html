@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <title>Facture #{{ facture.id }}</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap');
+
+    body {
+      font-family: 'Poppins', sans-serif;
+      background-color: #fff8f5;
+      color: #4a3c31;
+      margin: 20px auto;
+      max-width: 700px;
+      padding: 10px;
+      line-height: 1.4;
+    }
+
+    .header {
+      text-align: center;
+      margin-bottom: 15px;
+    }
+
+    .header h1 {
+      font-size: 2rem;
+      color: #8B0000;
+      margin: 0;
+    }
+
+    .header h2 {
+      font-size: 1rem;
+      color: #C98B53;
+      font-weight: 600;
+      text-transform: uppercase;
+      margin-top: 5px;
+    }
+
+    .info {
+      background-color: #ffffff;
+      padding: 15px;
+      border-left: 4px solid #C98B53;
+      border-radius: 8px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+      margin-bottom: 15px;
+    }
+
+    .info p {
+      margin: 4px 0;
+      font-size: 0.95rem;
+    }
+
+    .info strong {
+      color: #8B0000;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 15px;
+      background: white;
+      border-radius: 6px;
+      overflow: hidden;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+      font-size: 0.95rem;
+    }
+
+    thead {
+      background-color: #C98B53;
+      color: white;
+      text-transform: uppercase;
+      font-size: 0.85rem;
+    }
+
+    thead th {
+      padding: 10px;
+      text-align: left;
+    }
+
+    tbody td {
+      padding: 8px 10px;
+      border-bottom: 1px solid #f1f1f1;
+    }
+
+    tbody tr:nth-child(even) {
+      background-color: #fff4ec;
+    }
+
+    .total {
+      text-align: right;
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: #8B0000;
+      margin-top: 10px;
+    }
+
+    .footer {
+      margin-top: 25px;
+      text-align: center;
+      font-size: 0.9rem;
+      color: #7c6f66;
+      font-style: italic;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="header">
+    <h1>Facture</h1>
+    <h2>Restaurant CHEZ SAVEUR D'AFRIQUE</h2>
+  </div>
+
+  <div class="info">
+    <p><strong>Facture N° :</strong> {{ facture.id }}</p>
+    <p><strong>Client :</strong> {{ client.nom }} {{ client.prenom }}</p>
+    <p><strong>Email :</strong> {{ client.email }}</p>
+    <p><strong>Date :</strong> {{ facture.date_emission|date:"d/m/Y H:i" }}</p>
+  </div>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Plat</th>
+        <th>Quantité</th>
+        <th>Prix Unitaire (FCFA)</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for ligne in plats %}
+      <tr>
+        <td>{{ ligne.plat.nom }}</td>
+        <td>{{ ligne.quantite }}</td>
+        <td>{{ ligne.plat.prix_Unitaire }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+  <p class="total">Montant total : {{ facture.montant_total }} FCFA</p>
+
+  <div class="footer">
+    Merci pour votre commande. À très bientôt ! 🍽️
+  </div>
+
+</body>
+</html>

@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+
+{% block title %}Créer un nouveau Client{% endblock %}
+
+{% block header %}Créer un nouveau Client{% endblock %}
+
+{% block content %}
+    <h2>Créer un nouveau Client</h2>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Créer le Client</button>
+    </form>
+    {# Pas de lien retour vers une liste de clients par défaut dans vos URLs, mais vous pourriez en ajouter un #}
+    <a href="{% url 'utilisateur_list' %}" class="button" style="background-color: #6c757d;">Retour</a>
+    
+{% endblock %}

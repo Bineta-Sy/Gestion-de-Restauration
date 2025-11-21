@@ -1,0 +1,135 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Mon Panier{% endblock %}
+
+{% block content %}
+<style>
+    .cart-container {
+        max-width: 800px;
+        margin: 30px auto;
+        background: #fff;
+        padding: 25px;
+        border-radius: 12px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        border-top: 5px solid #8B0000; /* rouge africain */
+    }
+
+    .cart-container h1 {
+        text-align: center;
+        margin-bottom: 25px;
+        font-family: 'Playfair Display', serif;
+        color: #8B0000;
+    }
+
+    .cart-item {
+        display: flex;
+        align-items: center;
+        background: #fdf3f3; /* fond doux */
+        padding: 12px;
+        margin-bottom: 15px;
+        border-radius: 8px;
+        border-left: 4px solid #8B0000;
+    }
+
+    .cart-img {
+        width: 90px;
+        height: 90px;
+        border-radius: 8px;
+        margin-right: 15px;
+        object-fit: cover;
+        border: 2px solid #8B0000;
+    }
+
+    .cart-details h3 {
+        margin: 0;
+        color: #333;
+        font-size: 18px;
+        font-weight: bold;
+    }
+
+    .cart-details p {
+        margin: 4px 0;
+        color: #555;
+    }
+
+    .cart-total {
+        font-size: 20px;
+        text-align: right;
+        margin-top: 25px;
+        color: #8B0000;
+        font-weight: bold;
+    }
+
+    .cart-actions {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 20px;
+    }
+
+    .btn {
+        padding: 10px 18px;
+        border-radius: 6px;
+        text-decoration: none;
+        font-weight: bold;
+        transition: background 0.3s;
+    }
+
+    .btn-success {
+        background: #8B0000;
+        color: white;
+    }
+    .btn-success:hover {
+        background: #a80000;
+    }
+
+    .btn-secondary {
+        background: #555;
+        color: white;
+    }
+    .btn-secondary:hover {
+        background: #333;
+    }
+
+    .btn-delete {
+        display: inline-block;
+        margin-top: 5px;
+        color: red;
+        text-decoration: none;
+        font-size: 14px;
+    }
+</style>
+
+<div class="cart-container">
+    <h1>🛒 Mon Panier</h1>
+
+    {% if panier %}
+        {% for item in panier %}
+        <div class="cart-item">
+            <img src="{{ item.plat.image.url }}" alt="{{ item.plat.nom }}" class="cart-img">
+            <div class="cart-details">
+                <h3>{{ item.plat.nom }}</h3>
+                <p>Prix unitaire : <strong>{{ item.plat.prix_Unitaire }} FCFA</strong></p>
+                <p>Quantité : {{ item.quantite }}</p>
+                <p><strong>Total :</strong> {{ item.total }} FCFA</p>
+                <a href="{% url 'commande:supprimer_du_panier' item.plat.id %}" class="btn-delete">🗑 Supprimer</a>
+            </div>
+        </div>
+        {% endfor %}
+
+        <div class="cart-total">
+            Total Panier : {{ total }} FCFA
+        </div>
+
+        <div class="cart-actions">
+            <a href="{% url 'commande:valider_panier' %}" class="btn btn-success">✅ Valider le panier</a>
+            <a href="{% url 'menue:liste_plats' %}" class="btn btn-secondary">← Retour aux plats</a>
+        </div>
+    {% else %}
+        <p class="text-center text-muted">Votre panier est vide.</p>
+        <div class="text-center mt-3">
+            <a href="{% url 'menue:liste_plats' %}" class="btn btn-success">Voir les plats</a>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}

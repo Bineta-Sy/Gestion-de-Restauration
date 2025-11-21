@@ -1,0 +1,152 @@
+{% extends 'base.html' %}
+
+{% block title %}Nos Plats{% endblock %}
+{% block header %}Nos Plats{% endblock %}
+
+{% block content %}
+<style>
+  body {
+    background-color: #fff4ec;
+  }
+
+  .btn-retour {
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    width: 40px;
+    height: 40px;
+    background: #C98B53;
+    color: white;
+    font-size: 20px;
+    text-align: center;
+    line-height: 40px;
+    border-radius: 50%;
+    text-decoration: none;
+    transition: background 0.3s ease;
+  }
+
+  .btn-retour:hover {
+    background: #b07846;
+  }
+
+  .cart-link {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background: #C98B53;
+    color: white;
+    font-size: 24px;
+    padding: 12px 16px;
+    border-radius: 50%;
+    text-decoration: none;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    transition: background 0.3s ease;
+  }
+
+  .cart-link:hover {
+    background: #b07846;
+  }
+
+  .cart-badge {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    background: red;
+    color: white;
+    font-size: 12px;
+    font-weight: bold;
+    padding: 2px 6px;
+    border-radius: 50%;
+  }
+
+  .btn-c98b53 {
+    border: 2px solid #C98B53;
+    color: #C98B53;
+  }
+
+  .btn-c98b53:hover {
+    background-color: #C98B53;
+    color: white;
+  }
+
+  .border-c98b53 {
+    border: 1px solid #C98B53 !important;
+  }
+
+  .text-c98b53 {
+    color: #C98B53;
+  }
+
+  .bg-white-glass {
+    background-color: #ffffffee;
+  }
+</style>
+
+<div class="container my-5">
+  <form method="get" action="" class="mb-4 d-flex justify-content-center">
+  <input
+    type="text"
+    name="q"
+    placeholder="Rechercher un plat..."
+    value="{{ request.GET.q|default:'' }}"
+    class="form-control w-50 border border-c98b53 rounded-pill me-2"
+    aria-label="Recherche plat"
+  />
+  <button type="submit" class="btn btn-c98b53 rounded-pill px-4">
+    🔍 Rechercher
+  </button>
+</form>
+
+  <div class="card shadow-lg rounded-4 px-4 py-5 bg-white-glass">
+
+    <h1 class="text-center mb-4 fw-bold text-c98b53" style="font-family: 'Segoe UI', cursive;">
+      NOS PLATS AVEC AMOUR
+    </h1>
+
+    {% for categorie in categories %}
+    <h2 class="text-center fw-bold display-6 mb-3 text-c98b53">
+      {{ categorie.nom }}
+    </h2>
+
+    <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-3 mb-4">
+      {% for plat in categorie.filtered_plats %}
+      <div class="col">
+        <div class="card h-100 shadow-sm border-c98b53 rounded-4" style="font-family: 'Segoe UI', sans-serif;">
+          {% if plat.image %}
+          <img src="{{ plat.image.url }}" class="card-img-top rounded-top-4" style="height: 170px; object-fit: cover;">
+          {% endif %}
+          <div class="card-body p-3 d-flex flex-column">
+            <h5 class="card-title text-center fw-semibold text-c98b53">{{ plat.nom }}</h5>
+            <p class="card-text text-muted small text-center">{{ plat.description }}</p>
+            <p class="text-center mt-auto fw-bold text-secondary"> {{ plat.prix_Unitaire }} FCFA</p>
+            <a href="{% url 'commande:ajouter_au_panier' plat.id %}"
+              class="btn btn-c98b53 mt-2 w-100 rounded-pill">
+               Commander
+            </a>
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+    {% endfor %}
+
+  </div>
+</div>
+
+<!-- 🔙 Bouton retour flottant -->
+<a href="{% url 'home' %}" class="btn-retour"></a>
+
+<!-- 🛒 Icône panier flottante -->
+<a href="{% url 'commande:voir_panier' %}" class="cart-link">
+  🛒
+  {% if request.session.panier %}
+    <span class="cart-badge">{{ request.session.panier|length }}</span>
+  {% endif %}
+</a>
+
+<script>
+  setTimeout(function () {
+    window.location.href = "{% url 'home' %}";
+  }, 180000);
+</script>
+{% endblock %}

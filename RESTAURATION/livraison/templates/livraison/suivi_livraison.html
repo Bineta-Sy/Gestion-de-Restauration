@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+
+{% block title %}Suivi de Livraison{% endblock %}
+
+{% block header %}Suivi de Livraison{% endblock %}
+
+{% block content %}
+    <h2>Suivi de la Livraison #{{ livraison.pk }}</h2>
+    <p><strong>Commande ID:</strong> {{ livraison.commande.id }}</p>
+    <p><strong>Statut Actuel:</strong> {{ livraison.statusLivraison }}</p>
+    <p><strong>Livreur:</strong> {{ livraison.livreur.prenom }} {{ livraison.livreur.nom }}</p>
+    
+    {% if position_actuelle %}
+        <p><strong>Position GPS Actuelle:</strong> {{ position_actuelle }}</p>
+        {# Ici, vous pourriez intégrer une carte ou un lien vers une carte #}
+        <p>Visualiser sur la carte: <a href="https://www.google.com/maps/search/?api=1&query={{ position_actuelle }}" target="_blank">Google Maps</a></p>
+    {% else %}
+        <p>Aucune information de position GPS disponible pour le moment.</p>
+    {% endif %}
+
+    <a href="{% url 'livraison:livraison_detail' livraison.pk %}" class="button">Retour aux détails de la Livraison</a>
+    <a href="{% url 'livraison:livraison_list' %}" class="button" style="background-color: #6c757d;">Retour à la liste des Livraisons</a>
+{% endblock %}

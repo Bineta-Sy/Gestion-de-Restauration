@@ -1,0 +1,133 @@
+{% extends 'base.html' %}
+
+{% block title %}Statistiques des commandes{% endblock %}
+
+{% block content %}
+<style>
+    body {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        background-color: #f4f6f8;
+        margin: 0;
+        padding: 2rem;
+    }
+
+    h1 {
+        color: #2c3e50;
+        text-align: center;
+        margin-bottom: 2rem;
+    }
+
+    .grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(270px, 1fr));
+        gap: 1.5rem;
+    }
+
+    .card {
+        background-color: #ffffff;
+        border-radius: 12px;
+        border-left: 6px solid #4a90e2;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+        padding: 1.5rem;
+        transition: transform 0.2s ease, border-color 0.2s ease;
+    }
+
+    .card:hover {
+        transform: translateY(-6px);
+        border-color: #2c3e50;
+    }
+
+    .card:nth-child(2) { border-left-color: #27ae60; }
+    .card:nth-child(3) { border-left-color: #e67e22; }
+    .card:nth-child(4) { border-left-color: #9b59b6; }
+
+    .card h2 {
+        font-size: 1.1rem;
+        color: #2c3e50;
+        margin-bottom: 1rem;
+    }
+
+    ul {
+        list-style: none;
+        padding-left: 0;
+        margin: 0;
+    }
+
+    li {
+        background-color: #ecf0f1;
+        padding: 8px 12px;
+        border-radius: 6px;
+        margin-bottom: 8px;
+        font-size: 0.95rem;
+    }
+
+    .stat {
+        font-size: 1rem;
+        margin-bottom: 10px;
+        color: #34495e;
+    }
+
+    .button-container {
+        text-align: center;
+        margin-top: 2.5rem;
+    }
+
+    .back-button {
+        display: inline-block;
+        background-color: #4a5568;
+        color: #ffffff;
+        padding: 12px 24px;
+        border-radius: 8px;
+        font-weight: bold;
+        text-decoration: none;
+        transition: background-color 0.2s ease;
+    }
+
+    .back-button:hover {
+        background-color: #2d3748;
+    }
+</style>
+
+<h1>Statistiques des Commandes</h1>
+
+<div class="grid">
+    <div class="card">
+        <h2></h2> Global</h2>
+        <p class="stat"><strong>Total de commandes :</strong> {{ total_commandes }}</p>
+        <p class="stat"><strong>Prix total :</strong> {{ quantite_totale }} F CFA</p>
+    </div>
+
+    <div class="card">
+        <h2>Par Statut</h2>
+        <ul>
+            {% for item in commandes_par_statut %}
+                <li><strong>{{ item.status }}</strong> : {{ item.total }}</li>
+            {% endfor %}
+        </ul>
+    </div>
+
+    <div class="card">
+        <h2>Par Type</h2>
+        <ul>
+            {% for item in commandes_par_type %}
+                <li><strong>{{ item.type_commande }}</strong> : {{ item.total }}</li>
+            {% endfor %}
+        </ul>
+    </div>
+
+    <div class="card">
+        <h2> Par Date</h2>
+        <ul>
+            {% for item in commandes_par_date %}
+                <li><strong>{{ item.date_only }}</strong> : {{ item.total }}</li>
+            {% endfor %}
+        </ul>
+    </div>
+</div>
+
+<div class="button-container">
+    <a href="{% url 'users:admin_dashboard' %}" class="back-button">
+        ← Retour au Tableau de Bord
+    </a>
+</div>
+{% endblock %}

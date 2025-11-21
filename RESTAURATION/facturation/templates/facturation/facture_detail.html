@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+
+{% block title %}Détails de la Facture{% endblock %}
+
+{% block header %}Détails de la Facture{% endblock %}
+
+{% block content %}
+    <h2>Facture #{{ object.pk }}</h2>
+    <p><strong>Commande ID:</strong> {{ object.commande.id }}</p>
+    <p><strong>Montant Total:</strong> {{ object.montant }} €</p>
+    <p><strong>Date de Création:</strong> {{ object.date_creation|date:"d/m/Y H:i" }}</p> {# Supposant un champ date_creation #}
+    <p><strong>URL PDF:</strong> 
+        {% if object.pdfUrl %}
+            <a href="{{ object.pdfUrl }}" target="_blank">{{ object.pdfUrl }}</a>
+        {% else %}
+            Non généré
+        {% endif %}
+    </p>
+
+    <a href="{% url 'facture_update' object.pk %}" class="button">Modifier</a>
+    <a href="{% url 'facture_delete' object.pk %}" class="button" style="background-color: #dc3545;">Supprimer</a>
+    {% if object.pdfUrl %}
+        <a href="{{ object.pdfUrl }}" target="_blank" class="button" style="background-color: #28a745;">Voir PDF</a>
+    {% endif %}
+    <a href="{% url 'facture_list' %}" class="button" style="background-color: #6c757d;">Retour à la liste</a>
+{% endblock %}
