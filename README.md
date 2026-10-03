@@ -33,5 +33,5 @@ source venv/bin/activate
 3. **Lancer l'application :**
 *(Adapter la commande de démarrage selon le nom exact de votre script principal, par exemple :)*
 ```bash
-python main.py
+python app.py
 ```
